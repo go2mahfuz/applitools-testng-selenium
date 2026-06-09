@@ -25,12 +25,38 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 48px;
+      height: auto;
+    }
+
     h1 {
       font-size: 24px;
       font-weight: 600;
       color: #111;
-      margin-bottom: 28px;
+      margin-bottom: 6px;
       text-align: center;
+    }
+
+    .title {
+      font-size: 14px;
+      color: #777;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .title strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      color: #444;
+      margin-bottom: 4px;
     }
 
     label {
@@ -74,7 +100,8 @@
 
     button:hover { background: #4338ca; }
 
-    #message {
+    #message,
+    #forgotMessage {
       margin-top: 18px;
       padding: 10px 14px;
       border-radius: 6px;
@@ -84,13 +111,15 @@
       display: none;
     }
 
-    #message.success {
+    #message.success,
+    #forgotMessage.success {
       background: #ecfdf5;
       color: #065f46;
       border: 1px solid #6ee7b7;
     }
 
-    #message.error {
+    #message.error,
+    #forgotMessage.error {
       background: #fef2f2;
       color: #991b1b;
       border: 1px solid #fca5a5;
@@ -115,21 +144,115 @@
     }
 
     #logoutBtn:hover { background: #b91c1c; }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-bottom: 0;
+      accent-color: #4f46e5;
+      cursor: pointer;
+    }
+
+    .remember-me label {
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 400;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: -12px;
+      margin-bottom: 18px;
+    }
+
+    .forgot-password a {
+      font-size: 13px;
+      color: #4f46e5;
+      text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    #forgotForm {
+      display: none;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 13px;
+      color: #4f46e5;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .date-time {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      font-family: inherit;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
+  <div id="dateTime" class="date-time" aria-live="polite"></div>
   <div class="card">
     <!-- Login Form -->
     <div id="loginForm">
+      <div class="logo">
+        <img src="https://images.seeklogo.com/logo-png/48/1/applitools-icon-logo-png_seeklogo-483552.png" alt="Applitools" />
+      </div>
       <h1>Sign In</h1>
+      <p class="title"><strong>Welcome to Demo Login</strong>Please enter your details</p>
       <label for="username">Username</label>
       <input type="text" id="username" name="username" placeholder="Enter username" autocomplete="off" />
 
       <label for="password">Password</label>
       <input type="password" id="password" name="password" placeholder="Enter password" />
 
+      <div class="forgot-password">
+        <a href="#" onclick="showForgotForm(); return false;">Forgot password?</a>
+      </div>
+
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe" name="rememberMe" />
+        <label for="rememberMe">Remember me</label>
+      </div>
+
       <button id="loginBtn" onclick="handleLogin()">Login</button>
       <div id="message"></div>
+    </div>
+
+    <!-- Forgot Password Form -->
+    <div id="forgotForm">
+      <h1>Reset Password</h1>
+      <label for="resetUsername">Username</label>
+      <input type="text" id="resetUsername" name="resetUsername" placeholder="Enter your username" autocomplete="off" />
+      <button onclick="handleForgotPassword()">Send Reset Link</button>
+      <div id="forgotMessage"></div>
+      <a class="back-link" onclick="showLoginForm()">← Back to Sign In</a>
     </div>
 
     <!-- Dashboard shown after successful login -->
@@ -147,14 +270,30 @@
       user: "test1234",
     };
 
+    // Restore remembered username on page load
+    window.addEventListener("load", function () {
+      const saved = localStorage.getItem("rememberedUsername");
+      if (saved) {
+        document.getElementById("username").value = saved;
+        document.getElementById("rememberMe").checked = true;
+      }
+    });
+
     function handleLogin() {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
       const msg = document.getElementById("message");
 
       if (!username || !password) {
         showMessage("Please enter both username and password.", "error");
         return;
+      }
+
+      if (rememberMe) {
+        localStorage.setItem("rememberedUsername", username);
+      } else {
+        localStorage.removeItem("rememberedUsername");
       }
 
       if (USERS[username] && USERS[username] === password) {
@@ -168,11 +307,46 @@
     }
 
     function handleLogout() {
-      document.getElementById("username").value = "";
       document.getElementById("password").value = "";
+      if (!localStorage.getItem("rememberedUsername")) {
+        document.getElementById("username").value = "";
+      }
       document.getElementById("dashboard").style.display = "none";
       document.getElementById("loginForm").style.display = "block";
       showMessage("You have been logged out.", "success");
+    }
+
+    function showForgotForm() {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("forgotForm").style.display = "block";
+      document.getElementById("resetUsername").value = "";
+      document.getElementById("forgotMessage").style.display = "none";
+    }
+
+    function showLoginForm() {
+      document.getElementById("forgotForm").style.display = "none";
+      document.getElementById("loginForm").style.display = "block";
+    }
+
+    function handleForgotPassword() {
+      const username = document.getElementById("resetUsername").value.trim();
+      const msg = document.getElementById("forgotMessage");
+
+      if (!username) {
+        msg.textContent = "Please enter your username.";
+        msg.className = "error";
+        msg.style.display = "block";
+        return;
+      }
+
+      if (USERS[username]) {
+        msg.textContent = "A password reset link has been sent to your email.";
+        msg.className = "success";
+      } else {
+        msg.textContent = "No account found with that username.";
+        msg.className = "error";
+      }
+      msg.style.display = "block";
     }
 
     function showMessage(text, type) {
@@ -181,6 +355,22 @@
       msg.className = type;
       msg.style.display = "block";
     }
+
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById("dateTime").textContent = now.toLocaleString([], {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
 
     // Allow Enter key to submit
     document.addEventListener("keydown", function (e) {
