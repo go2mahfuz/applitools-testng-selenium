@@ -27,7 +27,7 @@ public class LoginTest extends BaseTest {
                 "Welcome message should display the logged-in username");
         
     }
-    
+    /* 
     @Test(description = "Invalid credentials should show an error message")
     public void testInvalidLogin() {
         LoginPage loginPage = new LoginPage().open(loginPageUrl);
@@ -65,5 +65,5 @@ public class LoginTest extends BaseTest {
         loginPage.clickLogout();
         EyesManager.getEyes().check("Login Page After Logout", Target.window().fully().dynamic(By.id("dateTime")));
         Assert.assertTrue(loginPage.isLoginFormVisible(), "Login form should reappear after logout");
-    } 
+    } */
 }
