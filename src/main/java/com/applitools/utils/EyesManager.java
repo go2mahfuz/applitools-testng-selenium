@@ -43,7 +43,7 @@ public class EyesManager {
       //  config.addBrowser(1280, 800, BrowserType.FIREFOX);
       //  config.addBrowser(1280, 800, BrowserType.EDGE_CHROMIUM);
         // Mobile emulation
-        config.addDeviceEmulation(DeviceName.iPhone_14_Pro, ScreenOrientation.PORTRAIT);
+      //  config.addDeviceEmulation(DeviceName.iPhone_14_Pro, ScreenOrientation.PORTRAIT);
         eyes.setConfiguration(config);
         eyes.open(DriverManager.getDriver(), "Login App", testName, new RectangleSize(1280, 800));
         eyesHolder.set(eyes);
