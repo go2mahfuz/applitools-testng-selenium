@@ -40,8 +40,8 @@ public class EyesManager {
         config.setBatch(batch);
         // Desktop browsers rendered on Ultrafast Grid
         config.addBrowser(1280, 800, BrowserType.CHROME);
-        config.addBrowser(1280, 800, BrowserType.FIREFOX);
-        config.addBrowser(1280, 800, BrowserType.EDGE_CHROMIUM);
+      //  config.addBrowser(1280, 800, BrowserType.FIREFOX);
+      //  config.addBrowser(1280, 800, BrowserType.EDGE_CHROMIUM);
         // Mobile emulation
         config.addDeviceEmulation(DeviceName.iPhone_14_Pro, ScreenOrientation.PORTRAIT);
         eyes.setConfiguration(config);

@@ -21,7 +21,7 @@ public class LoginTest extends BaseTest {
 
         loginPage.login(VALID_USER, VALID_PASSWORD);
      //  EyesManager.getEyes().check("Dashboard After Login", Target.window().fully().ignore(By.id("dateTime")));
-        EyesManager.getEyes().check("Dashboard After Login", Target.window().fully());
+        EyesManager.getEyes().check("Dashboard After Login", Target.window().fully().dynamic(By.id("dateTime")));
         Assert.assertTrue(loginPage.isDashboardVisible(), "Dashboard should be visible after login");
         Assert.assertEquals(loginPage.getWelcomeMessage(), VALID_USER,
                 "Welcome message should display the logged-in username");
@@ -34,7 +34,7 @@ public class LoginTest extends BaseTest {
         EyesManager.getEyes().check("Login Page", Target.window().fully().dynamic(By.id("dateTime")));
 
         loginPage.login(INVALID_USER, INVALID_PASS);
-        EyesManager.getEyes().check("Error Message After Invalid Login", Target.window().fully());
+        EyesManager.getEyes().check("Error Message After Invalid Login", Target.window().fully().dynamic(By.id("dateTime")));
 
         Assert.assertFalse(loginPage.isDashboardVisible(), "Dashboard should not be vsible on failed login");
         Assert.assertEquals(loginPage.getErrorMessage(), "Invalid username or password.",
