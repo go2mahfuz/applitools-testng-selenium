@@ -31,7 +31,7 @@ public class LoginTest extends BaseTest {
     @Test(description = "Invalid credentials should show an error message")
     public void testInvalidLogin() {
         LoginPage loginPage = new LoginPage().open(loginPageUrl);
-        EyesManager.getEyes().check("Login Page", Target.window().fully());
+        EyesManager.getEyes().check("Login Page", Target.window().fully().dynamic(By.id("dateTime")));
 
         loginPage.login(INVALID_USER, INVALID_PASS);
         EyesManager.getEyes().check("Error Message After Invalid Login", Target.window().fully());
@@ -44,7 +44,7 @@ public class LoginTest extends BaseTest {
     @Test(description = "Empty fields should show a validation error")
     public void testEmptyCredentials() {
         LoginPage loginPage = new LoginPage().open(loginPageUrl);
-        EyesManager.getEyes().check("Login Page", Target.window().fully());
+        EyesManager.getEyes().check("Login Page", Target.window().fully().dynamic(By.id("dateTime")));
 
         loginPage.clickLogin();
         EyesManager.getEyes().check("Validation Error After Empty Submit", Target.window().fully());
@@ -59,7 +59,7 @@ public class LoginTest extends BaseTest {
         LoginPage loginPage = new LoginPage().open(loginPageUrl);
 
         loginPage.login(VALID_USER, VALID_PASSWORD);
-        EyesManager.getEyes().check("Dashboard Before Logout", Target.window().fully());
+        EyesManager.getEyes().check("Dashboard Before Logout", Target.window().fully().dynamic(By.id("dateTime")));
         Assert.assertTrue(loginPage.isDashboardVisible(), "Dashboard should be visible before logout");
 
         loginPage.clickLogout();
