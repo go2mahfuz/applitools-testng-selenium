@@ -47,7 +47,7 @@ public class LoginTest extends BaseTest {
         EyesManager.getEyes().check("Login Page", Target.window().fully().dynamic(By.id("dateTime")));
 
         loginPage.clickLogin();
-        EyesManager.getEyes().check("Validation Error After Empty Submit", Target.window().fully());
+        EyesManager.getEyes().check("Validation Error After Empty Submit", Target.window().fully().dynamic(By.id("dateTime")));
 
         Assert.assertFalse(loginPage.isDashboardVisible(), "Dashboard should not appear with empty fields");
         Assert.assertEquals(loginPage.getErrorMessage(), "Please enter both username and password.",
@@ -63,7 +63,7 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.isDashboardVisible(), "Dashboard should be visible before logout");
 
         loginPage.clickLogout();
-        EyesManager.getEyes().check("Login Page After Logout", Target.window().fully());
+        EyesManager.getEyes().check("Login Page After Logout", Target.window().fully().dynamic(By.id("dateTime")));
         Assert.assertTrue(loginPage.isLoginFormVisible(), "Login form should reappear after logout");
     } 
 }
