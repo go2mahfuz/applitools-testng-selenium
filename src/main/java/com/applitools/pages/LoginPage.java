@@ -86,4 +86,8 @@ public class LoginPage extends BasePage {
     public boolean isLoginFormVisible() {
         return usernameInput.isDisplayed();
     }
+
+    public String getLoginButtonBackgroundColor() {
+        return loginButton.getCssValue("background-color");
+    }
 }

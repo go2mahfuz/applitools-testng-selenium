@@ -19,6 +19,7 @@
     <surefire.version>3.5.2</surefire.version>
     <applitools.version>5.83.19 </applitools.version>
     <applitools.images.version>5.81.3</applitools.images.version>
+    <extentreports.version>5.1.1</extentreports.version>
   </properties>
 
   <dependencies>
@@ -47,6 +48,13 @@
      <groupId>com.applitools</groupId>
      <artifactId>eyes-images-java5</artifactId>
      <version>${applitools.images.version}</version>
+    </dependency>
+
+    <!-- Extent Reports -->
+    <dependency>
+      <groupId>com.aventstack</groupId>
+      <artifactId>extentreports</artifactId>
+      <version>${extentreports.version}</version>
     </dependency>
   </dependencies>
 

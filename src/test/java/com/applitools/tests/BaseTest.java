@@ -18,7 +18,7 @@ public abstract class BaseTest {
     public void setUp(@Optional("chrome") String browser, @Optional("false") String headless,
                       Method method) throws MalformedURLException {
         DriverManager.initDriver(browser, Boolean.parseBoolean(headless));
-        File loginFile = new File("login.html").getAbsoluteFile();
+        File loginFile = new File("login_2.html").getAbsoluteFile();
         loginPageUrl = loginFile.toURI().toURL().toString();
         EyesManager.openEyes(method.getName());
     }
