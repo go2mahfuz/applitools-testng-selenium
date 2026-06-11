@@ -29,7 +29,7 @@ public class LoginPage extends BasePage {
 
     private static final By MESSAGE_LOCATOR  = By.id("message");
     private static final By DASHBOARD_LOCATOR = By.id("dashboard");
-    private static final By LOGO_IMAGE_LOCATOR = By.cssSelector(".logo img");
+    private static final By USERNAME_LOCATOR = By.id("username");
 
     public LoginPage() {
         super();
@@ -37,7 +37,7 @@ public class LoginPage extends BasePage {
 
     public LoginPage open(String url) {
         driver.get(url);
-        waitForVisible(LOGO_IMAGE_LOCATOR);
+        waitForVisible(USERNAME_LOCATOR);
         return this;
     }
 
