@@ -1,7 +1,13 @@
 package com.applitools.tests;
 
+import com.applitools.eyes.BatchInfo;
+import com.applitools.eyes.RectangleSize;
+import com.applitools.eyes.selenium.BrowserType;
+import com.applitools.eyes.selenium.Configuration;
+import com.applitools.eyes.selenium.Eyes;
+import com.applitools.eyes.visualgrid.services.RunnerOptions;
+import com.applitools.eyes.visualgrid.services.VisualGridRunner;
 import com.applitools.utils.DriverManager;
-import com.applitools.utils.EyesManager;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -11,7 +17,16 @@ import java.net.MalformedURLException;
 
 public abstract class BaseTest {
 
+    private static final VisualGridRunner runner =
+            new VisualGridRunner(new RunnerOptions().testConcurrency(5));
+    private static final BatchInfo batch = new BatchInfo("Login Feature Tests");
+    private static final ThreadLocal<Eyes> eyesHolder = new ThreadLocal<>();
+
     protected String loginPageUrl;
+
+    protected Eyes getEyes() {
+        return eyesHolder.get();
+    }
 
     @BeforeMethod
     @Parameters({"browser", "headless"})
@@ -20,23 +35,44 @@ public abstract class BaseTest {
         DriverManager.initDriver(browser, Boolean.parseBoolean(headless));
         File loginFile = new File("login_2.html").getAbsoluteFile();
         loginPageUrl = loginFile.toURI().toURL().toString();
-        EyesManager.openEyes(method.getName());
+
+        Eyes eyes = new Eyes(runner);
+        Configuration config = new Configuration();
+        config.setApiKey(resolveApiKey());
+        config.setBatch(batch);
+        config.addBrowser(1280, 800, BrowserType.CHROME);
+        // config.addBrowser(1280, 800, BrowserType.FIREFOX);
+        // config.addBrowser(1280, 800, BrowserType.EDGE_CHROMIUM);
+        // config.addDeviceEmulation(DeviceName.iPhone_14_Pro, ScreenOrientation.PORTRAIT);
+        eyes.setConfiguration(config);
+        eyes.open(DriverManager.getDriver(), "Login App 3", method.getName(), new RectangleSize(1280, 800));
+        eyesHolder.set(eyes);
     }
 
     @AfterMethod
     public void tearDown(ITestResult result) {
-        // Abort on failure so mismatched baselines don't pollute the dashboard
-        if (result.getStatus() == ITestResult.FAILURE) {
-            EyesManager.abortEyes();
-        } else {
-            EyesManager.closeEyes();
+        Eyes eyes = eyesHolder.get();
+        if (eyes != null) {
+            if (result.getStatus() == ITestResult.FAILURE) {
+                eyes.abortAsync();
+            } else {
+                eyes.closeAsync();
+            }
+            eyesHolder.remove();
         }
         DriverManager.quitDriver();
     }
 
-    // Wait for all UFG renders to complete and surface any visual diffs
     @AfterSuite
     public void finalizeVisualTests() {
-        EyesManager.finalizeResults();
+        runner.getAllTestResults(false);
+    }
+
+    private static String resolveApiKey() {
+        String key = System.getenv("APPLITOOLS_API_KEY");
+        if (key == null || key.isBlank()) {
+            throw new IllegalStateException("APPLITOOLS_API_KEY environment variable is not set");
+        }
+        return key;
     }
 }

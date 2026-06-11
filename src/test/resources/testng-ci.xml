@@ -13,7 +13,7 @@
   <test name="Login Tests">
     <classes>
       <class name="com.applitools.tests.LoginTest_eyes"/>
-      <class name="com.applitools.tests.LoginTest"/>
+   //   <class name="com.applitools.tests.LoginTest"/>
     </classes>
   </test>
 

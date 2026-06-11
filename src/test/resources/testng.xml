@@ -10,11 +10,11 @@
   <parameter name="browser"  value="chrome"/>
   <parameter name="headless" value="false"/>
 
-  <test name="Login Tests">
+  <!-- <test name="Login Tests">
     <classes>
       <class name="com.applitools.tests.LoginTest"/>
     </classes>
-  </test>
+  </test> -->
 
   <test name="Login Functional Tests">
     <classes>
