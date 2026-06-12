@@ -27,6 +27,21 @@ public class LoginPage extends BasePage {
     @FindBy(id = "logoutBtn")
     private WebElement logoutButton;
 
+    @FindBy(css = "h1")
+    private WebElement pageHeading;
+
+    @FindBy(css = ".title strong")
+    private WebElement titleStrong;
+
+    @FindBy(id = "rememberMe")
+    private WebElement rememberMeCheckbox;
+
+    @FindBy(css = ".forgot-password a")
+    private WebElement forgotPasswordLink;
+
+    @FindBy(css = "#dashboard h2")
+    private WebElement dashboardHeading;
+
     private static final By MESSAGE_LOCATOR  = By.id("message");
     private static final By DASHBOARD_LOCATOR = By.id("dashboard");
     private static final By USERNAME_LOCATOR = By.id("username");
@@ -89,5 +104,49 @@ public class LoginPage extends BasePage {
 
     public String getLoginButtonBackgroundColor() {
         return loginButton.getCssValue("background-color");
+    }
+
+    public String getPageHeading() {
+        return pageHeading.getText();
+    }
+
+    public String getTitleStrongText() {
+        return titleStrong.getText();
+    }
+
+    public boolean isUsernameFieldDisplayed() {
+        return usernameInput.isDisplayed();
+    }
+
+    public String getUsernamePlaceholder() {
+        return usernameInput.getDomAttribute("placeholder");
+    }
+
+    public boolean isPasswordFieldDisplayed() {
+        return passwordInput.isDisplayed();
+    }
+
+    public String getPasswordPlaceholder() {
+        return passwordInput.getDomAttribute("placeholder");
+    }
+
+    public String getLoginButtonText() {
+        return loginButton.getText();
+    }
+
+    public boolean isForgotPasswordLinkDisplayed() {
+        return forgotPasswordLink.isDisplayed();
+    }
+
+    public boolean isRememberMeCheckboxDisplayed() {
+        return rememberMeCheckbox.isDisplayed();
+    }
+
+    public String getDashboardHeading() {
+        return dashboardHeading.getText();
+    }
+
+    public boolean isLogoutButtonDisplayed() {
+        return logoutButton.isDisplayed();
     }
 }

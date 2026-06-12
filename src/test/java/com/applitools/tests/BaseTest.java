@@ -33,11 +33,13 @@ public abstract class BaseTest {
     public void setUp(@Optional("chrome") String browser, @Optional("false") String headless,
                       Method method) throws MalformedURLException {
         DriverManager.initDriver(browser, Boolean.parseBoolean(headless));
-        File loginFile = new File("login_2.html").getAbsoluteFile();
+        // Set the URL 
+        File loginFile = new File("login.html").getAbsoluteFile();
         loginPageUrl = loginFile.toURI().toURL().toString();
 
         Eyes eyes = new Eyes(runner);
         Configuration config = new Configuration();
+        config.setSaveNewTests(false);
         config.setApiKey(resolveApiKey());
         config.setBatch(batch);
         config.addBrowser(1280, 800, BrowserType.CHROME);
@@ -45,7 +47,7 @@ public abstract class BaseTest {
         // config.addBrowser(1280, 800, BrowserType.EDGE_CHROMIUM);
         // config.addDeviceEmulation(DeviceName.iPhone_14_Pro, ScreenOrientation.PORTRAIT);
         eyes.setConfiguration(config);
-        eyes.open(DriverManager.getDriver(), "Login App 3", method.getName(), new RectangleSize(1280, 800));
+        eyes.open(DriverManager.getDriver(), "Login App 4", method.getName(), new RectangleSize(1280, 800));
         eyesHolder.set(eyes);
     }
 
