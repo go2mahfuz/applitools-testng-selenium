@@ -14,12 +14,12 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <selenium.version>4.27.0</selenium.version>
-    <testng.version>7.10.2</testng.version>
-    <surefire.version>3.5.2</surefire.version>
-    <applitools.version>5.83.19 </applitools.version>
-    <applitools.images.version>5.81.3</applitools.images.version>
-    <extentreports.version>5.1.1</extentreports.version>
+    <selenium.version>4.48.0</selenium.version>
+    <testng.version>7.12.0</testng.version>
+    <surefire.version>3.5.6</surefire.version>
+    <applitools.version>5.85.4</applitools.version>
+    <applitools.images.version>5.83.4</applitools.images.version>
+    <extentreports.version>5.1.2</extentreports.version>
   </properties>
 
   <dependencies>
