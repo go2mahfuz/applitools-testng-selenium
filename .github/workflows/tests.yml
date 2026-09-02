@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -22,6 +26,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Run tests
         env:
           APPLITOOLS_API_KEY: ${{ secrets.APPLITOOLS_API_KEY }}
@@ -34,3 +43,33 @@ jobs:
         with:
           name: surefire-reports
           path: target/surefire-reports/
+
+      - name: AI visual review (Applitools MCP)
+        if: always()
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          APPLITOOLS_API_KEY: ${{ secrets.APPLITOOLS_API_KEY }}
+        run: |
+          npm install -g @anthropic-ai/claude-code
+
+          if [ ! -s target/eyes-batch-url.txt ]; then
+            echo "No Eyes batch URL found (no visual checkpoints ran); skipping AI visual review."
+            exit 0
+          fi
+          BATCH_URL=$(cat target/eyes-batch-url.txt)
+
+          claude -p "Use the applitools-mcp tool eyes_review_progress with scope \"batch\" and batchUrl \"$BATCH_URL\" to inspect this CI run's Eyes batch. Write a concise GitHub-flavored markdown summary covering: total sessions, how many passed, how many are new baselines, and how many are mismatching/unresolved (list their test names). End the summary with exactly one line: either \"STATUS: OK\" or \"STATUS: NEEDS_REVIEW\"." \
+            --mcp-config .github/mcp/applitools-mcp.ci.json \
+            --allowedTools "mcp__applitools-mcp__eyes_review_progress mcp__applitools-mcp__eyes_inspect_sessions mcp__applitools-mcp__eyes_inspect_steps mcp__applitools-mcp__eyes_review_diff_report mcp__applitools-mcp__eyes_verify_api_key" \
+            > eyes-review-summary.md
+
+          cat eyes-review-summary.md
+
+      - name: Post visual review comment on PR
+        if: always() && github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -s eyes-review-summary.md ]; then
+            gh pr comment "${{ github.event.pull_request.number }}" --body-file eyes-review-summary.md
+          fi

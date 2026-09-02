@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "applitools-mcp": {
+      "command": "npx",
+      "args": ["@applitools/mcp@latest"],
+      "env": {
+        "BETA_v0_5_16_2832": "true"
+      }
+    }
+  }
+}
