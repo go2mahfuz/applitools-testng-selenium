@@ -3,6 +3,8 @@ package com.applitools.tests;
 import com.applitools.eyes.MatchLevel;
 import com.applitools.eyes.selenium.fluent.Target;
 import com.applitools.pages.LoginPage;
+
+import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -58,7 +60,7 @@ public class LoginTest extends BaseTest {
                 "Login form should not be visible after successful login");
     }
 
-/*
+
     @Test(description = "Invalid credentials should show an error message")
     public void testInvalidLogin() {
         LoginPage loginPage = new LoginPage().open(loginPageUrl);
@@ -68,7 +70,7 @@ public class LoginTest extends BaseTest {
         Assert.assertEquals(loginPage.getErrorMessage(), "Invalid username or password.",
                 "Error message text should match");
     }
-
+/*
     @Test(description = "Empty fields should show a validation error")
     public void testEmptyCredentials() {
         LoginPage loginPage = new LoginPage().open(loginPageUrl);
